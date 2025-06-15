@@ -84,12 +84,21 @@ function endGame() {
 }
 
 function createDrop() {
-  // Create a new div element that will be our water drop
+  // Create a new div element that will be our water drop or bad emoji
   const drop = document.createElement("div");
+  const badEmojis = ["🌿", "🪱", "🪵", "🦠"];
+  const isBad = Math.random() < 0.25; // 25% chance for a bad emoji
 
-  // Randomly decide if this is a water drop or a bad emoji
-  const badEmojis = ["🌿", "🪱", "🪵"];
-  if (Math.random() < 0.25) { // 25% chance for a bad emoji
+  // Position the drop randomly across the game width
+  const gameWidth = document.getElementById("game-container").offsetWidth;
+  const xPosition = Math.random() * (gameWidth - 60);
+  drop.style.left = xPosition + "px";
+
+  drop.style.position = "absolute";
+  drop.style.top = "0px";
+  drop.style.animation = `dropFall ${dropSpeed}s linear forwards`;
+
+  if (isBad) {
     drop.className = "bad-emoji";
     drop.textContent = badEmojis[Math.floor(Math.random() * badEmojis.length)];
     drop.style.fontSize = `${Math.floor(Math.random() * 20 + 40)}px`;
@@ -98,32 +107,12 @@ function createDrop() {
     });
   } else {
     drop.className = "water-drop";
-
     // Make drops different sizes for visual variety
     const initialSize = 60;
     const sizeMultiplier = Math.random() * 0.8 + 0.5;
     const size = initialSize * sizeMultiplier;
     drop.style.width = drop.style.height = `${size}px`;
-
-    // Position the drop randomly across the game width
-    // Subtract 60 pixels to keep drops fully inside the container
-    const gameWidth = document.getElementById("game-container").offsetWidth;
-    const xPosition = Math.random() * (gameWidth - 60);
-    drop.style.left = xPosition + "px";
-
-    // Make drops fall for 4 seconds
-    drop.style.animationDuration = dropSpeed + "s";
-
-    // Add the new drop to the game screen
-    document.getElementById("game-container").appendChild(drop);
-
-    // Remove drops that reach the bottom (weren't clicked)
-    drop.addEventListener("animationend", () => {
-      drop.remove(); // Clean up drops that weren't caught
-    });
-
     drop.addEventListener("click", () => {
-      // Only count if it's a clean drop (not a bad one)
       if (!drop.classList.contains("bad-emoji")) {
         score++;
         updateScore();
@@ -132,11 +121,8 @@ function createDrop() {
     });
   }
 
-  // Add the new drop to the game screen
   document.getElementById("game-container").appendChild(drop);
-
-  // Remove drops that reach the bottom (weren't clicked)
   drop.addEventListener("animationend", () => {
-    drop.remove(); // Clean up drops that weren't caught
+    drop.remove();
   });
 }
