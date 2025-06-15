@@ -141,9 +141,13 @@ function createDrop() {
     drop.className = "bad-emoji";
     drop.textContent = badEmojis[Math.floor(Math.random() * badEmojis.length)];
     drop.style.fontSize = `${Math.floor(Math.random() * 20 + 40)}px`;
-    drop.addEventListener("click", () => {
-      if (gameRunning) endGame();
-    });
+    drop.addEventListener("click", (e) => {
+      e.stopPropagation();
+      if (gameRunning) {
+        drop.remove();
+        endGame();
+      }
+    }, { once: true });
   } else {
     drop.className = "water-drop";
     // Make drops different sizes for visual variety
@@ -151,13 +155,14 @@ function createDrop() {
     const sizeMultiplier = Math.random() * 0.8 + 0.5;
     const size = initialSize * sizeMultiplier;
     drop.style.width = drop.style.height = `${size}px`;
-    drop.addEventListener("click", () => {
+    drop.addEventListener("click", (e) => {
+      e.stopPropagation();
       if (!drop.classList.contains("bad-emoji")) {
         score++;
         updateScore();
         drop.remove();
       }
-    });
+    }, { once: true });
   }
 
   document.getElementById("game-container").appendChild(drop);
