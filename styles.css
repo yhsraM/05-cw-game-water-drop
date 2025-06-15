@@ -65,6 +65,7 @@ body {
     border-radius: 8px;
     position: relative;
     overflow: hidden;
+    pointer-events: auto !important;
 }
 
 
@@ -100,6 +101,11 @@ body {
     padding: 15px;  /* Add padding for larger click area */
     margin: -15px;  /* Offset padding to maintain visual size */
     transition: transform 0.1s ease;  /* Smooth hover effect */
+    pointer-events: auto !important;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .water-drop:hover {
@@ -119,6 +125,11 @@ body {
     left: 0;
     top: 0;
     transition: transform 0.1s ease;
+    pointer-events: auto !important;
+    touch-action: manipulation;
+    user-select: none;
+    -webkit-user-select: none;
+    -webkit-tap-highlight-color: transparent;
 }
 
 .game-title {
@@ -156,12 +167,35 @@ body {
 
 .game-over-box h2 {
     margin-bottom: 20px;
-    color: #F5402C;
+    color: #000000;
     font-size: 2.2em;
 }
 
+.score-summary {
+  margin-bottom: 20px;
+}
+.high-score {
+  color: #FFC907;
+  font-size: 1.3em;
+  font-weight: bold;
+  margin-bottom: 8px;
+}
+.high-score span {
+  color: #FFC907;
+  font-weight: bold;
+}
+.current-score {
+  color: #131313;
+  font-size: 1.1em;
+  font-weight: bold;
+}
+.current-score span {
+  color: #131313;
+  font-weight: bold;
+}
+
 #try-again-btn {
-    background: #2E9DF7;
+    background: #77A8BB;
     color: #fff;
     border: none;
     border-radius: 8px;
@@ -171,7 +205,17 @@ body {
     transition: background 0.2s;
 }
 #try-again-btn:hover {
-    background: #159A48;
+    background: #003366;
+}
+
+.confetti {
+  position: absolute;
+  top: 0;
+  border-radius: 3px;
+  opacity: 0.85;
+  pointer-events: none;
+  z-index: 2000;
+  animation: confetti-fall 2s cubic-bezier(0.23, 1, 0.32, 1) forwards;
 }
 
 @keyframes dropFall {
@@ -183,6 +227,37 @@ body {
     }
 }
 
+@keyframes confetti-fall {
+  0% {
+    transform: translateY(-40px) rotateZ(0deg);
+    opacity: 1;
+  }
+  80% {
+    opacity: 1;
+  }
+  100% {
+    transform: translateY(600px) rotateZ(360deg);
+    opacity: 0;
+  }
+}
+
+@media (max-width: 900px) {
+  .score-panel, #game-container {
+    width: 98vw;
+    min-width: 0;
+    max-width: 100vw;
+  }
+  #game-container {
+    height: 60vw;
+    max-height: 80vh;
+    min-height: 300px;
+  }
+  .game-wrapper {
+    width: 100vw;
+    padding: 0 2vw;
+  }
+}
+
 @media (max-width: 850px) {
     .game-wrapper, .score-panel, #game-container {
         width: 95vw;
@@ -191,4 +266,45 @@ body {
     #game-container {
         height: 70vh;
     }
+}
+
+@media (max-width: 600px) {
+  .score-panel, #game-container {
+    width: 100vw;
+    min-width: 0;
+    max-width: 100vw;
+  }
+  #game-container {
+    height: 60vw;
+    max-height: 60vh;
+    min-height: 200px;
+  }
+  .game-title {
+    font-size: 2em;
+  }
+  .score {
+    font-size: 1.1em;
+  }
+  .timer {
+    font-size: 1.1em;
+  }
+  .game-over-box {
+    padding: 20px 8px;
+    font-size: 1em;
+  }
+}
+
+@media (max-width: 400px) {
+  .game-title {
+    font-size: 1.2em;
+  }
+  .score-panel, #game-container {
+    width: 100vw;
+    min-width: 0;
+    max-width: 100vw;
+  }
+  #game-container {
+    height: 40vw;
+    min-height: 120px;
+  }
 }

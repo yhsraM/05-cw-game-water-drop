@@ -2,7 +2,9 @@
 let gameRunning = false; // Keeps track of whether game is active or not
 let dropMaker; // Will store our timer that creates drops regularly
 let score = 0; // Track clean drops collected
+let highScore = 0;
 
+// For the game timer
 let timerInterval; // For the game timer
 let timeLeft = 45; // Default game time changed to 45 seconds
 let dropInterval = 1000; // Initial drop interval (ms)
@@ -38,6 +40,15 @@ function startGame() {
 
   // Create new drops every second (1000 milliseconds)
   dropMaker = setInterval(createDrop, dropInterval);
+
+  // Gradually increase speed every second
+  if (typeof speedInterval !== 'undefined') clearInterval(speedInterval);
+  speedInterval = setInterval(() => {
+    if (!gameRunning) return;
+    if (dropSpeed > 1) {
+      dropSpeed -= 0.03; // Gradually increase speed
+    }
+  }, 1000);
 }
 
 function updateScore() {
@@ -57,19 +68,46 @@ function increaseDifficulty() {
   dropMaker = setInterval(createDrop, dropInterval);
 }
 
+function showConfetti() {
+  const confettiColors = ["#FFC907", "#2E9DF7", "#8BD1CB", "#4FCB53", "#FF902A", "#F5402C", "#159A48", "#F16061"];
+  const confettiCount = 80;
+  const overlay = document.getElementById('game-over-overlay');
+  for (let i = 0; i < confettiCount; i++) {
+    const conf = document.createElement('div');
+    conf.className = 'confetti';
+    conf.style.background = confettiColors[Math.floor(Math.random() * confettiColors.length)];
+    conf.style.left = Math.random() * 100 + '%';
+    conf.style.animationDelay = (Math.random() * 0.5) + 's';
+    conf.style.width = (Math.random() * 6 + 6) + 'px';
+    conf.style.height = (Math.random() * 12 + 8) + 'px';
+    overlay.appendChild(conf);
+  }
+  setTimeout(() => {
+    document.querySelectorAll('.confetti').forEach(c => c.remove());
+  }, 2200);
+}
+
 function showGameOver() {
   // Remove all drops
   document.querySelectorAll('.water-drop, .bad-emoji').forEach(el => el.remove());
+  // Check if new high score
+  const isNewHigh = score > highScore;
+  if (isNewHigh) highScore = score;
   // Create overlay
   let overlay = document.createElement('div');
   overlay.id = 'game-over-overlay';
   overlay.innerHTML = `
     <div class="game-over-box">
       <h2>Game Over!</h2>
+      <div class="score-summary">
+        <div class="high-score">Highest Score: <span>${highScore}</span></div>
+        <div class="current-score">Your Score: <span>${score}</span></div>
+      </div>
       <button id="try-again-btn">Try Again</button>
     </div>
   `;
   document.body.appendChild(overlay);
+  if (isNewHigh) showConfetti();
   document.getElementById('try-again-btn').onclick = () => {
     overlay.remove();
     startGame();
@@ -80,6 +118,7 @@ function endGame() {
   gameRunning = false;
   clearInterval(timerInterval);
   clearInterval(dropMaker);
+  if (typeof speedInterval !== 'undefined') clearInterval(speedInterval);
   showGameOver();
 }
 
