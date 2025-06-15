@@ -123,25 +123,45 @@ function endGame() {
 }
 
 function createDrop() {
-  // Create a new div element that will be our water drop or bad emoji
+  // Create a new div element that will be our water drop, bad emoji, or special object
   const drop = document.createElement("div");
   const badEmojis = ["🌿", "🪱", "🪵", "🦠"];
-  const isBad = Math.random() < 0.25; // 25% chance for a bad emoji
+  const isSpecial = Math.random() < 0.06; // ~6% chance for water can
+  const isBad = !isSpecial && Math.random() < 0.25; // 25% chance for a bad emoji (if not special)
 
   // Position the drop randomly across the game width
   const gameWidth = document.getElementById("game-container").offsetWidth;
   const xPosition = Math.random() * (gameWidth - 60);
   drop.style.left = xPosition + "px";
-
   drop.style.position = "absolute";
   drop.style.top = "0px";
   drop.style.animation = `dropFall ${dropSpeed}s linear forwards`;
 
-  if (isBad) {
+  if (isSpecial) {
+    drop.className = "special-can";
+    const img = document.createElement("img");
+    img.src = "img/water-can-transparent.png";
+    img.alt = "Water Can";
+    img.style.width = "60px";
+    img.style.height = "60px";
+    img.style.pointerEvents = "none";
+    drop.appendChild(img);
+    // Use both click and pointerdown for best compatibility
+    drop.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
+      e.stopPropagation();
+      if (gameRunning) {
+        timeLeft += 10;
+        updateTimer();
+        drop.remove();
+      }
+    }, { once: true });
+  } else if (isBad) {
     drop.className = "bad-emoji";
     drop.textContent = badEmojis[Math.floor(Math.random() * badEmojis.length)];
     drop.style.fontSize = `${Math.floor(Math.random() * 20 + 40)}px`;
-    drop.addEventListener("click", (e) => {
+    drop.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
       e.stopPropagation();
       if (gameRunning) {
         drop.remove();
@@ -155,7 +175,8 @@ function createDrop() {
     const sizeMultiplier = Math.random() * 0.8 + 0.5;
     const size = initialSize * sizeMultiplier;
     drop.style.width = drop.style.height = `${size}px`;
-    drop.addEventListener("click", (e) => {
+    drop.addEventListener("pointerdown", (e) => {
+      e.preventDefault();
       e.stopPropagation();
       if (!drop.classList.contains("bad-emoji")) {
         score++;

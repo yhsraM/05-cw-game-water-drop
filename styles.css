@@ -31,6 +31,7 @@ body {
     min-height: 100vh;
     background-color: #f0f0f0;
     font-family: Arial, sans-serif;
+    padding-bottom: 48px;  /* Added padding to prevent content from being hidden behind the footer */
 }
 
 .game-wrapper {
@@ -130,6 +131,26 @@ body {
     user-select: none;
     -webkit-user-select: none;
     -webkit-tap-highlight-color: transparent;
+}
+
+.special-can {
+  position: absolute;
+  width: 60px;
+  height: 60px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: none;
+  animation: dropFall linear forwards;
+  cursor: pointer;
+  z-index: 12;
+  pointer-events: auto;
+}
+.special-can img {
+  width: 60px;
+  height: 60px;
+  pointer-events: none;
+  user-select: none;
 }
 
 .game-title {
@@ -307,4 +328,23 @@ body {
     height: 40vw;
     min-height: 120px;
   }
+}
+
+.footer-credit {
+  width: 100vw;
+  text-align: center;
+  position: fixed;
+  left: 0;
+  bottom: 0;
+  background: #fff;
+  padding: 10px 0 6px 0;
+  font-size: 1.1em;
+  color: #333;
+  z-index: 3000;
+  box-shadow: 0 -2px 8px rgba(0,0,0,0.04);
+}
+.footer-logo {
+  height: 28px;
+  vertical-align: middle;
+  margin-left: 8px;
 }
