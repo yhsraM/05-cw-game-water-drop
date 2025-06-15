@@ -110,6 +110,17 @@ body {
     background-color: #ff4444;
 }
 
+.bad-emoji {
+    position: absolute;
+    animation: dropFall linear forwards;
+    cursor: pointer;
+    user-select: none;
+    z-index: 10;
+    left: 0;
+    top: 0;
+    transition: transform 0.1s ease;
+}
+
 .game-title {
     color: #131313;
     font-size: 48px;
@@ -123,6 +134,44 @@ body {
     font-size: 18px;
     margin-bottom: 20px;
     text-align: center;
+}
+
+#game-over-overlay {
+    position: fixed;
+    top: 0; left: 0; right: 0; bottom: 0;
+    background: rgba(0,0,0,0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+}
+
+.game-over-box {
+    background: #fff;
+    padding: 40px 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 24px rgba(0,0,0,0.18);
+    text-align: center;
+}
+
+.game-over-box h2 {
+    margin-bottom: 20px;
+    color: #F5402C;
+    font-size: 2.2em;
+}
+
+#try-again-btn {
+    background: #2E9DF7;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    padding: 12px 28px;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+#try-again-btn:hover {
+    background: #159A48;
 }
 
 @keyframes dropFall {
